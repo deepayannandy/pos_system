@@ -1,120 +1,151 @@
-<!DOCTYPE HTML>
+{% load static %}
 <html>
 <head><title>EzPos by DNYIndia</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-p {
-  text-align: center;
-  font-size: 60px;
-  margin-top: 0px;
+
+  body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "Exo", sans-serif;
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+  background-size: 400% 400%;
+  -webkit-animation: gradientBG 30s ease infinite;
+          animation: gradientBG 30s ease infinite;
 }
-body {
-	margin: 0;
-	width: 100%;
-	height: 100vh;
-	font-family: "Exo", sans-serif;
-	color: #fff;
-	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
-	background-size: 400% 400%;
-	-webkit-animation: gradientBG 10s ease infinite;
-	        animation: gradientBG 10s ease infinite;
+
+.card {
+  box-shadow: 0 8px 16px 0 rgba(0,0,2,0.6);
+  transition: 0.3s;
+  width: 100%;
+  border-radius: 5px;
 }
+
+.card:hover {
+  box-shadow: 0 20px 20px 0 rgba(0,0,0,0.2);
+}
+
+img {
+  margin-top: 20px;
+  border-radius: 30px 25px 5 5;
+}
+
 .container {
-	width: 100%;
-	position: absolute;
-	top: 35%;
-	text-align: center;
+  padding: 2px 16px;
 }
-h1 {
-	font-weight: 900;
+th, td {
+  padding: 5px;
 }
-a {
-	text-decoration: none;
-	color: #212121;
+h2 {
+  padding: 5px;
+  font-weight: 900;
 }
+
+h3 {
+  font-weight: 900;
+}
+
 @-webkit-keyframes gradientBG {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 @keyframes gradientBG {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 900;
 }
 
 </style>
 </head>
-<body onload="typeWriter();">
-<div class="container">
+<body>
+<table style="width:100% ; height:3%"  >
+    <tr>
+      <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
+      <th><h3 align="right">{{date}}</h3></th>
+    </tr>
+</table>
 
-    <h1>DNY Easy Billing</h1>
+<table style="width:90% ; height:60%" align="center"  >
+  <tr>
+    <th>
+      <div class="card">
+        <a href="/billing">
+      <center>
+      <img src="{% static 'images/billing.png'%}" alt="" style="width:30%">
+      <div class="container">
+      <h2><b>Billing</b></h2>
+      </center>
+        </a>
+      </div>
+      </div>
+    </th>
 
-<p id="msg"></p>
-<p id="demo"></p>
-</div>
-{% if user.is_authenticated %}
-<h1>Hello, {{user.first_name}}</h1>
-<a href="/logout">Logout</a>
-{% else %}
-<a href="/login">Login</a>
-{% endif %}
-<script>
-// Set the date we're counting down to
-var countDownDate = new Date("Dec 25, 2020 16:22:22").getTime();
+    <th>
+      <div class="card">
+      <center>
+        <a href="/stocks">
+      <img src="{% static 'images/stocks.png'%}" alt="" style="width:30%">
+      <div class="container">
+      <h2><b>Stock Management</b></h2>
+      </center>
+        </a>
+      </div>
+      </div>
+    </th>
+  </tr>
+  <tr>
+    <th>
+      <div class="card">
+      <center>
+        <a href="/khata">
+      <img src="{% static 'images/khata.png'%}" alt="" style="width:30%">
+      <div class="container">
+      <h2><b>Due Khata</b></h2>
+      </center>
+        </a>
+      </div>
+      </div>
+    </th>
 
-// Update the count down every 1 second
-var x = setInterval(function() {
-
-  // Get today's date and time
-  var now = new Date().getTime();
-
-  // Find the distance between now and the count down date
-  var distance = countDownDate - now;
-
-  // Time calculations for days, hours, minutes and seconds
-  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  // Output the result in an element with id="demo"
-  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
-  + minutes + "m " + seconds + "s ";
-
-  // If the count down is over, write some text
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById("demo").innerHTML = "EXPIRED";
-  }
-}, 1000);
-</script>
-
-<script>
-var i = 0;
-var txt = 'Billing is easy now with EasyBills by DNYIndia';
-var speed = 50;
-
-function typeWriter() {
-  if (i < txt.length) {
-    document.getElementById("msg").innerHTML += txt.charAt(i);
-    i++;
-    setTimeout(typeWriter, speed);
-  }
-}
-</script>
-
+    <th>
+      <div class="card">
+        <a href="/history">
+      <center>
+      <img src="{% static 'images/history.png'%}" alt="" style="width:30%">
+      <div class="container">
+      <h2><b>History</b></h2>
+      </center>
+          </a>
+      </div>
+      </div>
+    </th>
+  </tr>
+</table>
+<table style="width:100% ; height:5%"  >
+    <tr>
+        <th><h3 align="left"><a href="http://www.dnyindia.com"><u>A product of DNYIndia</u></a></h3></th>
+        <th><h3 align="right"><a href="/logout"><u>Logout</u></a></h3></th>
+    </tr>
+</table>
 </body>
 </html>
