@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head><title>Bulk_Import-EzPos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+  body {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  font-family: "Exo", sans-serif;
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+  background-size: 400% 400%;
+  -webkit-animation: gradientBG 30s ease infinite;
+          animation: gradientBG 30s ease infinite;
+}
+
+.card {
+  box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
+  transition: 0.3s;
+  width: 90%;
+  border-radius: 5px;
+}
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   opacity: 0.8;
+   color: white;
+   text-align: center;
+}
+
+img {
+  margin-top: 20px;
+  border-radius: 30px 25px 5 5;
+}
+
+.container {
+  padding: 2px 16px;
+}
+th, td {
+  padding: 15px;
+}
+h2 {
+  padding-left: 8px;
+  font-weight: 900;
+}
+
+h3 {
+  padding: 8px;
+  font-weight: 900;
+}
+
+@-webkit-keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+a {
+  padding: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 900;
+}
+  form.form1 {
+        padding-top: 40px;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 22px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+
+<table style="width:100% ; height:3%"  >
+    <tr>
+      <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
+      <th><h3 align="right">{{date}}</h3></th>
+    </tr>
+</table>
+<center>
+  <div class="card">
+      <center>
+        <h3><u>Import Items</u></h3>
+        <form action="/bulk_import" method="post">
+          {% csrf_token %}
+          <input type="file" value="Choose File" name="path">
+          <input type="reset" value="Reset">
+          <input type="submit" value="Add">
+      </form>
+      </div>
+      <div class="card">
+        <h2><u>Available Items</u></h2>
+        <table>
+    <tr>
+      <th>Item Name</th>
+      <th>Item Price</th>
+      <th>Quantity</th>
+      <th>Tax / GST</th>
+      <th>Barcode</th>
+    </tr>
+    {% for st in States %}
+    <tr>
+      <td>{{pd.name}}</td>
+      <td>{{pd.price}}</td>
+      <td>{{pd.quantity}}</td>
+      <td>{{pd.tax}}</td>
+    </tr>
+    {% endfor %}
+
+  </table>
+      </center>
+      </div>     
+  <div class="footer">
+<table style="width:100% ; height:5%"  >
+    <tr>
+        <th><h3 align="left"><a href="/home"><u>Back</u></a></h3></th>
+    </tr>
+</table>
+</div>
+ 
+</body>
+</html> 

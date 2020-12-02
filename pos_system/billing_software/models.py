@@ -6,6 +6,8 @@ class Products(models.Model):
     price= models.IntegerField()
     quantity= models.IntegerField()
     tax= models.IntegerField(default=0)
+    barcode =models.CharField(max_length=13)
 class Users(models.Model):
     userid=models.CharField(max_length=10)
     password= models.CharField(max_length=20)
+
