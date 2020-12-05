@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head><title>Billing-EzPos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+function validateForm() {
+  var x = document.forms["Item"]["quantity"].value;
+  if (x == "" || x == null) {
+    alert("Quantity must be filled out");
+    return false;
+  }
+}
+</script>
+<style>
+
+  body {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  font-family: "Exo", sans-serif;
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+  background-size: 400% 400%;
+  -webkit-animation: gradientBG 30s ease infinite;
+          animation: gradientBG 30s ease infinite;
+}
+
+
+.card {
+  box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
+  transition: 0.3s;
+  width: 90%;
+  border-radius: 5px;
+  height: 20%;
+  overflow: scroll;
+}
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   opacity: 0.9;
+   color: white;
+   text-align: center;
+}
+
+img {
+  margin-top: 20px;
+  border-radius: 30px 25px 5 5;
+}
+
+.container {
+  padding: 2px 16px;
+}
+th, td {
+  padding: 5px;
+}
+h2 {
+  padding-left: 8px;
+  font-weight: 900;
+}
+
+h3 {
+  padding: 8px;
+  font-weight: 900;
+}
+select {
+  // A reset of styles, including removing the default dropdown arrow
+  appearance: none;
+  // Additional resets for further consistency
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
+
+
+@-webkit-keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+a {
+  padding: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 900;
+}
+  form.form1 {
+        padding-top: 10px;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+
+<table style="width:100% ; height:3%"  >
+    <tr>
+      <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
+      <th><h3 align="right">{{date}}</h3></th>
+    </tr>
+</table>
+<center>
+  <div class="card">
+      <center>
+        <h3><u>Customer Section</u></h3>
+      <table style="width:70%; height:10%" align="center"  >
+        <form action="/adduser" method="post">
+        <tr>
+          <th>Consumer Name</th>
+          <th>Address</th>
+          <th>Contact No.</th>
+          <th>GST No.</th>
+        </tr>
+        <tr>
+          <td><input type="text" id="consumerName" name="consumerName"></td>
+          <td><input type="text" id="address" name="Address"></td>
+          <td><input type="text" id="contact" name="contact"></td>
+          <td><input type="text" id="gst_no" name="gst_no"></td>
+          <td><input type="submit" value="Add user"></td>
+          <td><input type="reset" value="Reset"></td>
+          <td><input type="button" value="Load"></td>
+        </tr>
+        </table>
+      </form>
+      </div>
+      <div class="card">
+      <center>
+        <h3><u>Select Items</u></h3>
+      <table style="width:70%; height:10%" align="center"  >
+        <form name="Item" action="/additem_cart" method="post" onsubmit="return validateForm()" required>
+        <tr>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Discount</th>
+          <th>Barcode No.</th>
+        </tr>
+        <tr>
+          <td><select type="text" id="item_name" name="item_name">
+            <option value="{{item}}">{{item}}</option>
+            </select>
+          </td>
+          <td><input type="number" id="quantity" name="quantity" min="1"></td>
+          <td><input type="number" id="discount" name="discount" value="0"></td>
+          <td><input type="text" id="item_barcode name="item_barcode"></td>
+          <td><input type="submit" value="Add user"></td>
+        </tr>
+        </table>
+      </form>
+      </div>
+      <div class="card">
+        <h2><u>My Cart</u></h2>
+        <table>
+    <tr>
+      <th>Item Name</th>
+      <th>Item Price/Unit</th>
+      <th>Quantity</th>
+      <th>GST</th>
+      <th>Subtotal</th>
+      <th>Action</th>
+    </tr>
+    {% for st in States %}
+    <tr>
+      <td>{{st.name}}</td>
+      <td>{{st.confirmed}}</td>
+      <td>{{st.active}}</td>
+      <td>{{st.recovered}}</td>
+    </tr>
+    {% endfor %}
+
+  </table>
+      </center>
+      </div>     
+  <div class="footer">
+<table style="width:100% ; height:5%"  >
+    <tr>
+        <th><h4 align="left"><a href="/home"><u>Back</u></a></h3></th>
+        <th><h3 align="right">TotalCartValue: {{total}}</h4></th>
+        <th><h3 align="right"><a href="/settle_print"><u>Settle and Print</u></a></h4></th>
+    </tr>
+</table>
+</div>
+ 
+</body>
+</html> 

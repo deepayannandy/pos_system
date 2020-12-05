@@ -46,7 +46,11 @@ def logout(requests):
     return redirect('/login')
 
 def billing(requests):
-    return HttpResponse("billing")
+    if requests.method == 'POST':
+        print("post")
+        return redirect('/billing')
+    else:
+        return render(requests, 'billing.html')
 def stocks(request):
     if request.method == 'POST':
         item_name=request.POST['item_name']
