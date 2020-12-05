@@ -11,5 +11,7 @@ urlpatterns = [
     path('history', views.history, name='history'),
     path('barcode', views.barcode, name='barcode'),
     path('delete_item/<int:item_id>/', views.delete_item, name='delete_item'),
-    path('bulk_import', views.bulk_import, name='delete_item')
+    path('bulk_import', views.bulk_import, name='delete_item'),
+    path('addcustomer', views.addcustomer, name='addcustomer'),
+    path('cart', views.cart, name='cart'),
 ]

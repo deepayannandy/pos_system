@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+{% load static %}
 <html>
-<head><title>Billing-EzPos</title>
+<head><title>Cart-Billing-EzPos</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
 function validateForm() {
@@ -31,16 +31,13 @@ function validateForm() {
   transition: 0.3s;
   width: 90%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
 }
 .cart {
   box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
   transition: 0.3s;
   width: 90%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
+
 }
 .footer {
    position: fixed;
@@ -149,7 +146,7 @@ a {
       <center>
         <h3><u>Customer Section</u></h3>
       <table style="width:70%; height:10%" align="center"  >
-        <form action="/addcustomer" method="post">
+        <form action="/adduser" method="post">
             {% csrf_token %}
         <tr>
           <th>Consumer Name</th>
@@ -158,21 +155,67 @@ a {
           <th>GST No.</th>
         </tr>
         <tr>
-          <td><input type="text" id="consumerName" name="consumerName"></td>
-          <td><input type="text" id="address" name="Address"></td>
-          <td><input type="text" id="contact" name="contact"></td>
-          <td><input type="text" id="gst_no" name="gst_no"></td>
-          <td><input type="submit" value="Save And Next"></td>
-          <td><input type="reset" value="Reset"></td>
+            {% for dt in customerdata %}
+          <td><label>{{dt}}</label></td>
+            {% endfor %}
         </tr>
         </table>
       </form>
       </div>
+      <div class="cart" >
+      <center>
+        <h3><u>Select Items</u></h3>
+      <table style="width:70%; height:10%" align="center"  >
+        <form name="Item" action="/cart" method="post" onsubmit="return validateForm()" required>
+            {% csrf_token %}
+        <tr>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Discount</th>
+          <th>Barcode No.</th>
+        </tr>
+        <tr>
+          <td><select type="text" id="item_name" name="item_name">
+              {% for item in items %}
+            <option value="{{item}}">{{item}}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td><input type="number" id="quantity" name="quantity" min="1"></td>
+          <td><input type="number" id="discount" name="discount" value="0"></td>
+          <td><input type="text" id="item_barcode name="item_barcode"></td>
+          <td><input type="submit" value="Add user"></td>
+        </tr>
+        </table>
+      </form>
+      </div>
+      <div class="card">
+        <h2><u>My Cart</u></h2>
+        <table>
+    <tr>
+      <th>Item Name</th>
+      <th>Item Price/Unit</th>
+      <th>Quantity</th>
+      <th>GST</th>
+      <th>Subtotal</th>
+    </tr>
+    {% for it in cart_items %}
+    <tr>
+        {% for i in it %}
+      <td>{{i}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
 
+  </table>
+      </center>
+      </div>     
   <div class="footer">
 <table style="width:100% ; height:5%"  >
     <tr>
-        <th><h4 align="left"><a href="/"><u>Back</u></a></h3></th>
+        <th><h4 align="left"><a href="/billing"><u>Back</u></a></h3></th>
+        <th><h3 align="right">TotalCartValue: {{total}}</h4></th>
+        <th><h3 align="right"><a href="/settle_print"><u>Settle and Print</u></a></h4></th>
     </tr>
 </table>
 </div>

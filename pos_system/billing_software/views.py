@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 # Create your views here.
-from .models import Users, Products
+from .models import Users, Products, Customer
 from . import operations
 
 
@@ -48,9 +48,9 @@ def logout(requests):
 def billing(requests):
     if requests.method == 'POST':
         print("post")
-        return redirect('/billing')
+        return redirect('/billing',{'date': operations.getdate()})
     else:
-        return render(requests, 'billing.html')
+        return render(requests, 'billing.html',{'date': operations.getdate()})
 def stocks(request):
     if request.method == 'POST':
         item_name=request.POST['item_name']
@@ -79,3 +79,43 @@ def history(requests):
     return HttpResponse("history")
 def barcode(requests):
     return HttpResponse("barcode")
+
+def addcustomer(request):
+    if request.method == 'POST':
+        consumer_name = request.POST['consumerName']
+        consumer_address = request.POST['Address']
+        consumer_contact = request.POST['contact']
+        consumer_gst= request.POST['gst_no']
+        if consumer_contact in Customer.objects.values_list('customerContact', flat=True):
+            operations.set_consumersdata(consumer_contact)
+            return redirect('/cart', {'date': operations.getdate(),})
+        else:
+            print(len(consumer_contact))
+            if len(consumer_contact)<10:
+                messages.info(request, "Number Invalid!")
+                return redirect('/billing', {'date': operations.getdate()})
+            elif len(consumer_name)==0 or len(consumer_address)==0 :
+                messages.info(request, "Customer Does not Exist! please fill Name and Address ")
+                return redirect('/billing', {'date': operations.getdate()})
+            elif len(consumer_name)!=0 and len(consumer_address)!=0 and len(consumer_contact)>9:
+                consumer = Customer(customerName=consumer_name, customerAddress=consumer_address,customerContact=consumer_contact, customerGST=consumer_gst, customerDue=0)
+                consumer.save()
+                messages.info(request, "User Added!")
+                operations.set_consumersdata(consumer_contact)
+                return redirect('/cart', {'date': operations.getdate()})
+
+    else:
+        pass
+
+def cart(requests):
+    if requests.method=='POST':
+        product_name=requests.POST['item_name']
+        product_quantity=requests.POST['quantity']
+        product_dis=requests.POST['discount']
+        cart_items=operations.calculate(product_name,product_quantity,product_dis)
+        print(cart_items)
+        return render(requests, 'cart.html',
+                      {'date': operations.getdate(), 'customerdata': operations.get_customerdata(),
+                       'items': Products.objects.values_list('name', flat=True), 'cart_items': cart_items,'total':operations.get_total_cart()})
+    else:
+        return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart()})
