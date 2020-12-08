@@ -4,21 +4,23 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 # Create your views here.
-from .models import Users, Products, Customer
+from .models import Users, Products, Customer, Company, Transactions
 from . import operations
 
 
 def home(requests):
     if requests.user.is_authenticated:
-        return  render(requests,'home.html', {'date': operations.getdate(),'today_sell':operations.daily_total()})
+        path= Company.objects.get(pk=1)
+        return  render(requests,'home.html', {'date': operations.getdate(),'today_sell':operations.daily_total(),'comp_logo': path.c_logo})
     else:
         return render(requests, 'login.html')
 
 
 
 def login(request):
+    path = Company.objects.get(pk=1)
     if request.user.is_authenticated:
-        return render(request, 'home.html')
+        return render(request, 'home.html',{'comp_logo': path.c_logo})
     else:
         if request.method == 'POST':
             username = request.POST.get("username")
@@ -36,7 +38,7 @@ def login(request):
 
 
         else:
-            return render(request, 'login.html')
+            return render(request, 'login.html',{'comp_logo': path.c_logo})
         user = list(Users.objects.all())
         print(user[0])
 
@@ -46,12 +48,14 @@ def logout(requests):
     return redirect('/login')
 
 def billing(requests):
+    path = Company.objects.get(pk=1)
     if requests.method == 'POST':
         print("post")
-        return redirect('/billing',{'date': operations.getdate()})
+        return redirect('/billing',{'date': operations.getdate(),'comp_logo': path.c_logo})
     else:
-        return render(requests, 'billing.html',{'date': operations.getdate()})
+        return render(requests, 'billing.html',{'date': operations.getdate(),'comp_logo': path.c_logo})
 def stocks(request):
+    path = Company.objects.get(pk=1)
     if request.method == 'POST':
         item_name=request.POST['item_name']
         item_price=request.POST['item_price']
@@ -61,13 +65,14 @@ def stocks(request):
         product.save()
         return redirect('/stocks')
     else:
-        return render(request, 'stocks.html',{'date': operations.getdate(), 'product_list': Products.objects.all()})
+        return render(request, 'stocks.html',{'date': operations.getdate(), 'product_list': Products.objects.all(),'comp_logo': path.c_logo})
 def delete_item(requests,item_id):
     print(item_id)
     product_to_del=Products.objects.get(id=item_id)
     product_to_del.delete()
     return redirect('/stocks')
 def update_item(requests,item_id):
+    path = Company.objects.get(pk=1)
     if requests.method=='POST':
         item_name = requests.POST['item_name']
         item_price = requests.POST['item_price']
@@ -83,13 +88,14 @@ def update_item(requests,item_id):
     else:
         print("Update",item_id)
         product=Products.objects.get(id=item_id)
-        return render(requests, 'item_update.html', {'itemdata': product})
+        return render(requests, 'item_update.html', {'itemdata': product,'comp_logo': path.c_logo})
 def bulk_import(request):
+    path = Company.objects.get(pk=1)
     if request.method == 'POST':
         print(request.POST['path'])
         return redirect('/bulk_import')
     else:
-        return render(request,'bulk_import.html')
+        return render(request,'bulk_import.html', {'comp_logo': path.c_logo})
 def khata(requests):
     return HttpResponse("khata")
 def history(requests):
@@ -97,7 +103,9 @@ def history(requests):
 def barcode(requests):
     return HttpResponse("barcode")
 def acounts(requests):
-    return HttpResponse("Accounts")
+    path = Company.objects.get(pk=1)
+    alltnx= Transactions.objects.all()
+    return render(requests,'accounts.html',{'all_tnx':alltnx,'comp_logo': path.c_logo})
 
 def addcustomer(request):
     if request.method == 'POST':
@@ -127,6 +135,7 @@ def addcustomer(request):
         pass
 
 def cart(requests):
+    path = Company.objects.get(pk=1)
     if requests.method=='POST':
         product_name=requests.POST['item_name']
         product_quantity=requests.POST['quantity']
@@ -138,9 +147,9 @@ def cart(requests):
         cart_items=operations.calculate(product_name,product_quantity,product_dis)
         return render(requests, 'cart.html',
                       {'date': operations.getdate(), 'customerdata': operations.get_customerdata(),
-                       'items': Products.objects.values_list('name', flat=True), 'cart_items': cart_items,'total':operations.get_total_cart()})
+                       'items': Products.objects.values_list('name', flat=True), 'cart_items': cart_items,'total':operations.get_total_cart(),'comp_logo': path.c_logo})
     else:
-        return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart()})
+        return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart(),'comp_logo': path.c_logo})
 def settle(requests):
     operations.settelment()
     return redirect('/')

@@ -1,17 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head><title>Billing-EzPos</title>
-    <link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
+<head><title>Accounts-EzPos</title>
+	<link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>
-function validateForm() {
-  var x = document.forms["Item"]["quantity"].value;
-  if (x == "" || x == null) {
-    alert("Quantity must be filled out");
-    return false;
-  }
-}
-</script>
 <style>
 
   body {
@@ -62,7 +53,7 @@ img {
   padding: 2px 16px;
 }
 th, td {
-  padding: 5px;
+  padding: 10px;
 }
 h2 {
   padding-left: 8px;
@@ -137,43 +128,38 @@ a {
 <table style="width:100% ; height:3%"  >
     <tr>
       <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
-        {% for message in messages %}
-        <th><h2 align="left">{{message}}</h2></th>
-         {% endfor %}
+      <th><h3 align="left">{{message}}</h3></th>
       <th><h3 align="right">{{date}}</h3></th>
     </tr>
 </table>
 <center>
-  <div class="card">
-      <center>
-        <h3><u>Customer Section</u></h3>
-      <table style="width:70%; height:10%" align="center"  >
-        <form action="/addcustomer" method="post">
-            {% csrf_token %}
-        <tr>
-          <th>Consumer Name</th>
-          <th>Address</th>
-          <th>Contact No.</th>
-          <th>GST No.</th>
-        </tr>
-        <tr>
-          <td><input type="text" id="consumerName" name="consumerName"></td>
-          <td><input type="text" id="address" name="Address"></td>
-          <td><input type="text" id="contact" name="contact"></td>
-          <td><input type="text" id="gst_no" name="gst_no"></td>
-          <td><input type="submit" value="Save And Next"></td>
-          <td><input type="reset" value="Reset"></td>
-        </tr>
-        </table>
-      </form>
-      </div>
-
-  <div class="footer">
-<table style="width:100% ; height:5%"  >
+      <div class="card">
+        <h2><u>All Transactions</u></h2>
+        <table>
     <tr>
-        <th><h4 align="left"><a href="/"><u>Back</u></a></h3></th>
+      <th>Invoice No.</th>
+      <th>Consumer Name</th>
+      <th>Time</th>
+      <th>Date</th>
+      <th>Billing Amount</th>
     </tr>
-</table>
+    {% for tnx in all_tnx %}
+    <tr>
+      <td>{{tnx.bill_no}}</td>
+      <td>{{tnx.bill_to}}</td>
+      <td>{{tnx.bill_time}}</td>
+      <td>{{tnx.bill_date}}</td>
+     <td>₹ {{tnx.bill_amount}}</td>
+
+    </tr>
+    {% endfor %}
+
+  </table>
+      </center>
+      </div>     
+  <div class="footer">
+
+  <h3 align="left"><a href="/"><u>Back</u></a></h3>
 </div>
  
 </body>
