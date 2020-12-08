@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class Products(models.Model):
     name= models.CharField(max_length=100)
     price= models.IntegerField()
@@ -24,3 +24,12 @@ class Company(models.Model):
     c_address=models.CharField(max_length=100)
     c_contact = models.CharField(max_length=100)
     c_website= models.CharField(max_length=100)
+class Transactions(models.Model):
+    bill_no=models.IntegerField()
+    bill_date=models.CharField(max_length=20)
+    bill_time=models.CharField(max_length=20)
+    bill_to=models.CharField(max_length=50)
+    bill_mod_pay=models.CharField(max_length=10)
+    bill_amount=models.IntegerField()
+
+

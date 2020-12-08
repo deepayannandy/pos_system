@@ -1,7 +1,7 @@
 from datetime import datetime
 import pytz
 
-from .models import Customer, Products
+from .models import Customer, Products, Company, Transactions
 
 cart_consumer_data=[]
 cart_items=[]
@@ -46,7 +46,7 @@ def get_cart():
     return cart_items
 def get_total_cart():
     return total
-def billing_update(item_name,b_quantity):
+def stocks_update(item_name,b_quantity):
     item = Products.objects.get(name=item_name)
     old_q=item.quantity
     new_q=old_q-int(b_quantity)
@@ -55,4 +55,38 @@ def billing_update(item_name,b_quantity):
 def settelment():
     for i in cart_items:
         print(i[0],i[2])
-        billing_update(i[0],i[2])
+        stocks_update(i[0],i[2])
+    print_bill()
+def print_bill():
+    global cart_consumer_data, cart_items, total
+    company_data=Company.objects.all()
+    for i in company_data:
+        print(i)
+        print(i.c_name,i.c_invoice,i.c_gst_no,i.c_address,i.c_contact,i.c_website)
+    print(cart_consumer_data)
+    print(cart_items)
+    print(total)
+    tnsx_update()
+def tnsx_update():
+    global cart_consumer_data,total
+    IST = pytz.timezone('Asia/Kolkata')
+    datetime_ist = datetime.now(IST)
+    date=datetime_ist.strftime('%d/%m/%y')
+    time=datetime_ist.strftime('%H:%M:%S')
+    company_data = Company.objects.get(pk='1')
+    invoiceto=company_data.c_invoice
+    company_data.c_invoice=invoiceto+1
+    company_data.save()
+    tnsx1= Transactions(bill_no=invoiceto,bill_date=date,bill_time=time,bill_to=cart_consumer_data[0],bill_mod_pay='',bill_amount=total)
+    tnsx1.save()
+def daily_total():
+    IST = pytz.timezone('Asia/Kolkata')
+    datetime_ist = datetime.now(IST)
+    date = datetime_ist.strftime('%d/%m/%y')
+    total=0
+    for i in Transactions.objects.filter(bill_date= date):
+        print(i.bill_amount)
+        total=total+i.bill_amount
+    print(total)
+    return total
+

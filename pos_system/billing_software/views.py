@@ -10,7 +10,7 @@ from . import operations
 
 def home(requests):
     if requests.user.is_authenticated:
-        return  render(requests,'home.html', {'date': operations.getdate()})
+        return  render(requests,'home.html', {'date': operations.getdate(),'today_sell':operations.daily_total()})
     else:
         return render(requests, 'login.html')
 
@@ -96,6 +96,8 @@ def history(requests):
     return HttpResponse("history")
 def barcode(requests):
     return HttpResponse("barcode")
+def acounts(requests):
+    return HttpResponse("Accounts")
 
 def addcustomer(request):
     if request.method == 'POST':
