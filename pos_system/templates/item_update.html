@@ -1,6 +1,6 @@
 {% load static %}
 <html>
-<head><title>Stocks-EzPos</title>
+<head><title>Stocks_Update-EzPos</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 
@@ -109,9 +109,9 @@ a {
 <center>
   <div class="card">
       <center>
-        <h3><u>Item Mandgement</u></h3>
+        <h3><u>Product Data Updater</u></h3>
       <table style="width:70%; height:10%" align="center"  >
-        <form action="/stocks" method="post">
+        <form action="/update_item/{{itemdata.id}}/" method="post">
             {% csrf_token %}
         <tr>
           <th>Item Name</th>
@@ -120,58 +120,20 @@ a {
           <th>Tax / GST</th>
         </tr>
         <tr>
-          <td><input type="text" id="item_name" name="item_name" autofocus></td>
-          <td><input type="text" id="item_price" name="item_price"></td>
-          <td><input type="text" id="item_quantity" name="item_quantity"></td>
-          <td><input type="text" id="item_tax" name="item_tax"></td>
+          <td><input type="text" id="item_name" value='{{itemdata.name}}' name="item_name" ></td>
+          <td><input type="text" id="item_price" name="item_price" value="{{itemdata.price}}"></td>
+          <td><input type="text" id="item_quantity" name="item_quantity" value="{{itemdata.quantity}}"></td>
+          <td><input type="text" id="item_tax" name="item_tax" value="{{itemdata.tax}}"></td>
         </tr>
         </table>
-          <input type="button" value="Import Bulk" onclick="window.location.href='/bulk_import'">
           <input type="reset" value="Reset">
-          <input type="submit" value="Save">
+          <input type="submit" value="Update">
       </form>
       </div>
-      <div class="card">
-        <h2><u>My Items</u></h2>
-        <table>
-    <tr>
-      <th>Item Name</th>
-      <th>Item Price</th>
-      <th>Quantity</th>
-      <th>Tax / GST</th>
-        <th>Barcode</th>
-        <th>Action</th>
-    </tr>
-    {% for pd in product_list %}
-    <tr>
-      <td>{{pd.name}}</td>
-      <td>{{pd.price}}</td>
-      <td>{{pd.quantity}}</td>
-      <td>{{pd.tax}}</td>
-        <td>{{pd.barcode}}</td>
-         <td>
-            <form action="update_item/{{pd.id}}/" method="get" >
-                {% csrf_token %}
-                    <input type="submit" value="Update">
-            </form>
-        </td>
-        <td>
-            <form action="delete_item/{{pd.id}}/" method="post" >
-                {% csrf_token %}
-                    <input type="submit" value="Delete">
-            </form>
-        </td>
+    <div class="footer">
+ <h3 align="left"><a href="/stocks"><u>Back</u></a></h3>
 
-    </tr>
-    {% endfor %}
+    </div>
 
-  </table>
-      </center>
-      </div>
-<div class="footer">
- <h3 align="left"><a href="/"><u>Back</u></a></h3>
-
-</div>
- 
 </body>
-</html> 
+</html>

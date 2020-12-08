@@ -46,3 +46,13 @@ def get_cart():
     return cart_items
 def get_total_cart():
     return total
+def billing_update(item_name,b_quantity):
+    item = Products.objects.get(name=item_name)
+    old_q=item.quantity
+    new_q=old_q-int(b_quantity)
+    item.quantity=new_q
+    item.save()
+def settelment():
+    for i in cart_items:
+        print(i[0],i[2])
+        billing_update(i[0],i[2])

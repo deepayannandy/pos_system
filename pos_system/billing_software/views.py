@@ -67,6 +67,23 @@ def delete_item(requests,item_id):
     product_to_del=Products.objects.get(id=item_id)
     product_to_del.delete()
     return redirect('/stocks')
+def update_item(requests,item_id):
+    if requests.method=='POST':
+        item_name = requests.POST['item_name']
+        item_price = requests.POST['item_price']
+        item_quantity = requests.POST['item_quantity']
+        item_tax = int(requests.POST['item_tax'])
+        product = Products.objects.get(pk=item_id)
+        product.name=item_name
+        product.price=item_price
+        product.quantity=item_quantity
+        product.tax=item_tax
+        product.save()
+        return redirect('/stocks')
+    else:
+        print("Update",item_id)
+        product=Products.objects.get(id=item_id)
+        return render(requests, 'item_update.html', {'itemdata': product})
 def bulk_import(request):
     if request.method == 'POST':
         print(request.POST['path'])
@@ -111,11 +128,17 @@ def cart(requests):
     if requests.method=='POST':
         product_name=requests.POST['item_name']
         product_quantity=requests.POST['quantity']
+        prod_det=Products.objects.get(name=product_name)
+        if int(prod_det.quantity)<int(product_quantity):
+            product_quantity=int(prod_det.quantity)
+            messages.info(requests, "Only"+str(prod_det.quantity)+"Available!")
         product_dis=requests.POST['discount']
         cart_items=operations.calculate(product_name,product_quantity,product_dis)
-        print(cart_items)
         return render(requests, 'cart.html',
                       {'date': operations.getdate(), 'customerdata': operations.get_customerdata(),
                        'items': Products.objects.values_list('name', flat=True), 'cart_items': cart_items,'total':operations.get_total_cart()})
     else:
         return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart()})
+def settle(requests):
+    operations.settelment()
+    return redirect('/')
