@@ -1,6 +1,6 @@
 from datetime import datetime
 import pytz
-
+from . import invoice_2inch_gen
 from .models import Customer, Products, Company, Transactions
 
 cart_consumer_data=[]
@@ -39,7 +39,7 @@ def calculate(item_name,quantity,discount):
         r_data.append((item_data.price/100)*item_data.tax)
         r_data.append((item_data.price+(item_data.price/100)*item_data.tax)*int(quantity))
     cart_items.append(r_data)
-    total= total+(item_data.price+(item_data.price/100)*item_data.tax)*int(quantity)
+    total= total+(item_data.price*int(quantity))
     return cart_items
 def get_cart():
     global cart_items
@@ -56,17 +56,21 @@ def settelment():
     for i in cart_items:
         print(i[0],i[2])
         stocks_update(i[0],i[2])
-    print_bill()
+    return print_bill()
 def print_bill():
     global cart_consumer_data, cart_items, total
     company_data=Company.objects.all()
     for i in company_data:
         print(i)
-        print(i.c_name,i.c_invoice,i.c_gst_no,i.c_address,i.c_contact,i.c_website)
+        cdata=[i.c_name,i.c_invoice,getdate(),i.c_address,i.c_contact,18]
+
+    print(cdata)
     print(cart_consumer_data)
     print(cart_items)
     print(total)
+    bill_path=invoice_2inch_gen.genpdf(cdata,cart_items,total)
     tnsx_update()
+    return bill_path
 def tnsx_update():
     global cart_consumer_data,total
     IST = pytz.timezone('Asia/Kolkata')

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head><title>Accounts-EzPos</title>
+	<link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+  body {
+  margin: 0;
+  width: 100%;
+  height: 100vh;
+  font-family: "Exo", sans-serif;
+  color: #fff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
+  background-size: 400% 400%;
+  -webkit-animation: gradientBG 30s ease infinite;
+          animation: gradientBG 30s ease infinite;
+}
+
+
+.card {
+  box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
+  transition: 0.3s;
+  width: 90%;
+  border-radius: 5px;
+  height: 20%;
+  overflow: scroll;
+}
+.cart {
+  box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
+  transition: 0.3s;
+  width: 90%;
+  border-radius: 5px;
+  height: 20%;
+  overflow: scroll;
+}
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   opacity: 0.9;
+   color: white;
+   text-align: center;
+}
+
+img {
+  margin-top: 20px;
+  border-radius: 30px 25px 5 5;
+}
+
+.container {
+  padding: 2px 16px;
+}
+th, td {
+  padding: 10px;
+}
+h2 {
+  padding-left: 8px;
+  font-weight: 900;
+}
+
+h3 {
+  padding: 8px;
+  font-weight: 900;
+}
+select {
+  // A reset of styles, including removing the default dropdown arrow
+  appearance: none;
+  // Additional resets for further consistency
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
+
+
+@-webkit-keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+a {
+  padding: 8px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 900;
+}
+  form.form1 {
+        padding-top: 10px;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+<table style="width:100% ; height:3%"  >
+    <tr>
+      <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
+      <th><h3 align="left">{{message}}</h3></th>
+      <th><h3 align="right">{{date}}</h3></th>
+    </tr>
+</table>
+<center>
+      <div class="card">
+        <h2><u>All Transactions</u></h2>
+        <h3 align="left"><a href={{billpath}}  target="_blank"><u>Print</u></a></h3>
+      </center>
+      </div>
+  <div class="footer">
+
+  <h3 align="left"><a href="/"><u>Back</u></a></h3>
+</div>
+
+</body>
+</html>

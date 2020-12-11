@@ -143,6 +143,7 @@ def cart(requests):
         if int(prod_det.quantity)<int(product_quantity):
             product_quantity=int(prod_det.quantity)
             messages.info(requests, "Only"+str(prod_det.quantity)+"Available!")
+
         product_dis=requests.POST['discount']
         cart_items=operations.calculate(product_name,product_quantity,product_dis)
         return render(requests, 'cart.html',
@@ -151,5 +152,5 @@ def cart(requests):
     else:
         return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart(),'comp_logo': path.c_logo})
 def settle(requests):
-    operations.settelment()
-    return redirect('/')
+    billpath=operations.settelment()
+    return render(requests,'print.html',{'billpath':billpath})
