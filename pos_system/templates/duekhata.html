@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Print-EzPos</title>
+<head><title>DueKhata-EzPos</title>
 	<link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -8,9 +8,10 @@
   body {
   margin: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   font-family: "Exo", sans-serif;
   color: #fff;
+  overflow: auto;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
   background-size: 400% 400%;
   -webkit-animation: gradientBG 30s ease infinite;
@@ -23,16 +24,18 @@
   transition: 0.3s;
   width: 90%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
+  height: 80%;
+  padding: 16px;
+
 }
 .cart {
   box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
   transition: 0.3s;
   width: 90%;
+  height: 100%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
+  padding: 16px;
+
 }
 .footer {
    position: fixed;
@@ -44,6 +47,7 @@
    text-align: center;
 }
 
+
 img {
   margin-top: 20px;
   border-radius: 30px 25px 5 5;
@@ -53,7 +57,7 @@ img {
   padding: 2px 16px;
 }
 th, td {
-  padding: 15px;
+  padding: 10px;
 }
 h2 {
   padding-left: 8px;
@@ -79,9 +83,7 @@ select {
   line-height: inherit;
 }
 
-  form.form1 {
-        padding-top: 10px;
-    }
+
 @-webkit-keyframes gradientBG {
   0% {
     background-position: 0% 50%;
@@ -104,20 +106,6 @@ select {
     background-position: 0% 50%;
   }
 }
-select {
-  // A reset of styles, including removing the default dropdown arrow
-  appearance: none;
-  // Additional resets for further consistency
-  background-color: transparent;
-  border: none;
-  padding: 0 1em 0 0;
-  margin: 0;
-  width: 100%;
-  font-family: inherit;
-  font-size: inherit;
-  cursor: inherit;
-  line-height: inherit;
-}
 a {
   padding: 8px;
   text-decoration: none;
@@ -125,14 +113,14 @@ a {
   font-weight: 900;
 }
   form.form1 {
-        padding-top: 3px;
+        padding-top: 10px;
     }
 
     input[type=button], input[type=submit], input[type=reset] {
   background-color: #4CAF50;
   border: none;
   color: white;
-  padding: 8px 16px;
+  padding: 4px 8px;
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
@@ -149,37 +137,44 @@ a {
     </tr>
 </table>
 <center>
-      <div class="card">
-        <h2><u>Checkout</u></h2>
-          <table>
-           <form name="Item" action="/printbill" method="post" onsubmit="return validateForm()" required>
-            {% csrf_token %}
-          <tr>
-              <th>Total Billing Amount</th>
-          <th>Payment Mode</th>
-          <th>Details</th>
-              <th>Action</th>
-        </tr>
-               <tr>
-                   <td><h2>₹ {{total}}</h2></td>
-          <td><select type="text" id="paymentmode" name="paymentmode">
-            <option value="Cash">Cash</option>
-            <option value="Card">Card</option>
-            <option value="Wallet">Wallet</option>
-              <option value="Cradit">Cradit</option>
-            </select>
-          </td>
-          <td><input type="text" id="details" name="details" ></td>
-          <td><input type="submit" value="Save and Print"></td>
+      <div class="card" >
+        <h2><u>Khata</u></h2>
+        <table>
+    <tr>
+      <th>Customer Name</th>
+      <th>Consumer Contact</th>
+      <th>Due Amount</th>
+        <th>Action</th>
+    </tr>
 
-        </tr>
-        </table>
-           </form>
-      </div>
+    {% for det in all_det %}
+    {% if det.customerDue > 0 %}
+    <tr>
+      <td>{{det.customerName}}</td>
+      <td>{{det.customerContact}}</td>
+     <td>₹ {{det.customerDue}}</td>
+        <td> <form action="update_khata/{{det.id}}/" method="get" >
+                {% csrf_token %}
+                    <input type="submit" value="Update">
+            </form>
+
+            <form action="send_reminder/{{det.id}}/" method="get" >
+                {% csrf_token %}
+                    <input type="submit" value="Send_reminder">
+            </form></td>
+    </tr>
+
+    {% else %}
+            {% endif %}
+    {% endfor %}
+
+  </table>
+      </center>
+      </div>     
   <div class="footer">
 
-  <h3 align="left"><a href="/billing"><u>Back</u></a></h3>
+  <h3 align="left"><a href="/"><u>Back</u></a></h3>
 </div>
-
+ 
 </body>
-</html>
+</html> 

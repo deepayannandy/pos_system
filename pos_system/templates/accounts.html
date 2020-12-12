@@ -7,7 +7,7 @@
 
   body {
   margin: 0;
-  width: 100%;
+  width: 90%;
   height: 100%;
   font-family: "Exo", sans-serif;
   color: #fff;
@@ -32,7 +32,7 @@
   box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
   transition: 0.3s;
   width: 90%;
-  height: 80%;
+  height: 100%;
   border-radius: 5px;
   padding: 16px;
 
@@ -146,6 +146,7 @@ a {
       <th>Time</th>
       <th>Date</th>
       <th>Billing Amount</th>
+        <th>Mode of Payment</th>
     </tr>
 
     {% for tnx in all_tnx %}
@@ -156,6 +157,7 @@ a {
       <td>{{tnx.bill_time}}</td>
       <td>{{tnx.bill_date}}</td>
      <td>₹ {{tnx.bill_amount}}</td>
+        <td>{{tnx.bill_mod_pay}}</td>
 
     </tr>
     {% endfor %}

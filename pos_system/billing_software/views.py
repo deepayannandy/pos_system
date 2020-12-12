@@ -101,7 +101,8 @@ def bulk_import(request):
     else:
         return render(request,'bulk_import.html', {'comp_logo': path.c_logo})
 def khata(requests):
-    return HttpResponse("khata")
+    path = Company.objects.get(pk=1)
+    return render(requests,'duekhata.html',{'date':operations.getdate(),'all_det':operations.get_due_cust() ,'comp_logo':path.c_logo})
 def history(requests):
     return HttpResponse("history")
 def barcode(requests):
@@ -144,7 +145,6 @@ def cart(requests):
         product_name=requests.POST['item_name']
         product_quantity=requests.POST['quantity']
         prod_det=Products.objects.get(name=product_name)
-        print(type(prod_det.quantity),int(prod_det.quantity)<int(product_quantity))
         if int(prod_det.quantity)>int(product_quantity):
             messages.info(requests, "Item added")
             product_dis = requests.POST['discount']
@@ -166,11 +166,24 @@ def cart(requests):
     else:
         return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart(),'comp_logo': path.c_logo})
 def settle(requests):
-    return render(requests,'print.html')
+    return render(requests,'print.html',{'total':operations.get_total_cart(),'date':operations.getdate()})
 def printbill(requests):
-    fs = FileSystemStorage()
-    billpath = operations.settelment()
-    billpath = str(BASE_DIR) + "/" + billpath
-    print(billpath)
-    responce = HttpResponse(fs.open(billpath), content_type='application/pdf')
-    return responce
+    if requests.method=='POST':
+        fs = FileSystemStorage()
+        pmode=requests.POST['paymentmode']
+        if pmode=="Cash":
+            details = "Cash"
+        if pmode=="Cradit":
+            details=requests.POST['details']
+            c_contact=operations.get_customerdata()[2]
+            customer = Customer.objects.get(customerContact=c_contact)
+            old_cred=customer.customerDue
+            customer.customerDue=old_cred+operations.get_total_cart()
+            customer.save()
+        else:
+            details = requests.POST['details']
+        billpath = operations.settelment(pmode+" TXRef:"+details)
+        billpath = str(BASE_DIR) + "/" + billpath
+        print(billpath)
+        responce = HttpResponse(fs.open(billpath), content_type='application/pdf')
+        return responce

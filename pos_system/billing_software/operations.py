@@ -55,14 +55,14 @@ def stocks_update(item_name,b_quantity):
     new_q=old_q-int(b_quantity)
     item.quantity=new_q
     item.save()
-def settelment():
+def settelment(mode):
     for i in cart_items:
         print(i[0],i[2])
         stocks_update(i[0],i[2])
-    a=print_bill()
+    a=print_bill(mode)
     print(a)
     return a
-def print_bill():
+def print_bill(mode):
     global cart_consumer_data, cart_items, total
     company_data=Company.objects.all()
     for i in company_data:
@@ -73,10 +73,10 @@ def print_bill():
     print(cart_consumer_data)
     print(cart_items)
     print(total)
-    bill_path=invoice_2inch_gen.genpdf(cdata,cart_items,total)
-    tnsx_update()
+    bill_path=invoice_2inch_gen.genpdf(cdata,cart_items,total,mode)
+    tnsx_update(mode)
     return bill_path
-def tnsx_update():
+def tnsx_update(mode):
     global cart_consumer_data,total,totalCart
     IST = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.now(IST)
@@ -86,7 +86,7 @@ def tnsx_update():
     invoiceto=company_data.c_invoice
     company_data.c_invoice=invoiceto+1
     company_data.save()
-    tnsx1= Transactions(bill_no=invoiceto,bill_date=date,bill_time=time,bill_to=cart_consumer_data[0],bill_mod_pay='',bill_amount=totalCart)
+    tnsx1= Transactions(bill_no=invoiceto,bill_date=date,bill_time=time,bill_to=cart_consumer_data[0],bill_mod_pay=mode,bill_amount=totalCart)
     tnsx1.save()
 def daily_total():
     IST = pytz.timezone('Asia/Kolkata')
@@ -99,3 +99,6 @@ def daily_total():
     print(total)
     return total
 
+def get_due_cust():
+    due_cust=Customer.objects.all()
+    return due_cust

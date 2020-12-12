@@ -29,7 +29,7 @@ class Transactions(models.Model):
     bill_date=models.CharField(max_length=20)
     bill_time=models.CharField(max_length=20)
     bill_to=models.CharField(max_length=50)
-    bill_mod_pay=models.CharField(max_length=10)
+    bill_mod_pay=models.CharField(max_length=30)
     bill_amount=models.IntegerField()
 
 

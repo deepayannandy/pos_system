@@ -7,7 +7,7 @@ from reportlab.lib.units import inch, mm
 
 mid=80
 
-def genpdf(company,items,total):
+def genpdf(company,items,total,mod):
     pagesize=(56*mm,500*mm)
     pdf= canvas.Canvas("media/bills/"+str(company[1])+'.pdf',bottomup=0,pagesize=pagesize)
     pdf.setLineWidth(.3)
@@ -48,8 +48,11 @@ def genpdf(company,items,total):
     pdf.setFont("Helvetica-Bold", 10)
     pdf.drawString(10, y + 30, "TOTAL:")
     pdf.drawString(90, y + 30, "Rs." + str(total+(total / 100) * company[5]))
+    pdf.setFont("Helvetica-Bold", 8)
+    pdf.drawString(10, y + 40, "Mode of Payment:")
+    pdf.drawString(90, y + 40, mod.split()[0])
     pdf.setFont("Helvetica-Bold", 12)
-    pdf.drawCentredString(mid, y + 50, "Thank You Visit Again!")
+    pdf.drawCentredString(mid, y + 80, "Thank You Visit Again!")
     pdf.save()
     return "media/bills/"+str(company[1])+'.pdf'
 
