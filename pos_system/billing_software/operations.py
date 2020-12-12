@@ -6,6 +6,7 @@ from .models import Customer, Products, Company, Transactions
 cart_consumer_data=[]
 cart_items=[]
 total=0
+totalCart=0
 def getdate():
     IST = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.now(IST)
@@ -15,10 +16,11 @@ def generate_bar_num():
     datetime_ist = datetime.now(IST)
     return datetime_ist.strftime('%H%M%S%d%m%y')
 def set_consumersdata(number):
-    global cart_consumer_data,cart_items,total
+    global cart_consumer_data,cart_items,total,totalCart
     cart_consumer_data=[]
     cart_items=[]
     total = 0
+    totalCart=0
     data= Customer.objects.filter(customerContact=number)
     for i in data:
         cart_consumer_data.append(i.customerName)
@@ -31,21 +33,22 @@ def get_customerdata():
 def calculate(item_name,quantity,discount):
     item=Products.objects.filter(name=item_name)
     r_data=[]
-    global total,cart_items
+    global total,cart_items,totalCart
     for item_data in item:
         r_data.append(item_data.name)
         r_data.append(item_data.price)
         r_data.append(quantity)
         r_data.append((item_data.price/100)*item_data.tax)
-        r_data.append((item_data.price+(item_data.price/100)*item_data.tax)*int(quantity))
+        r_data.append((item_data.price+(item_data.price/100)*item_data.tax)*int(quantity)-int(discount))
     cart_items.append(r_data)
     total= total+(item_data.price*int(quantity))
+    totalCart=totalCart+(item_data.price+(item_data.price/100)*item_data.tax)*int(quantity)-int(discount)
     return cart_items
 def get_cart():
     global cart_items
     return cart_items
 def get_total_cart():
-    return total
+    return totalCart
 def stocks_update(item_name,b_quantity):
     item = Products.objects.get(name=item_name)
     old_q=item.quantity
@@ -56,7 +59,9 @@ def settelment():
     for i in cart_items:
         print(i[0],i[2])
         stocks_update(i[0],i[2])
-    return print_bill()
+    a=print_bill()
+    print(a)
+    return a
 def print_bill():
     global cart_consumer_data, cart_items, total
     company_data=Company.objects.all()
@@ -72,7 +77,7 @@ def print_bill():
     tnsx_update()
     return bill_path
 def tnsx_update():
-    global cart_consumer_data,total
+    global cart_consumer_data,total,totalCart
     IST = pytz.timezone('Asia/Kolkata')
     datetime_ist = datetime.now(IST)
     date=datetime_ist.strftime('%d/%m/%y')
@@ -81,7 +86,7 @@ def tnsx_update():
     invoiceto=company_data.c_invoice
     company_data.c_invoice=invoiceto+1
     company_data.save()
-    tnsx1= Transactions(bill_no=invoiceto,bill_date=date,bill_time=time,bill_to=cart_consumer_data[0],bill_mod_pay='',bill_amount=total)
+    tnsx1= Transactions(bill_no=invoiceto,bill_date=date,bill_time=time,bill_to=cart_consumer_data[0],bill_mod_pay='',bill_amount=totalCart)
     tnsx1.save()
 def daily_total():
     IST = pytz.timezone('Asia/Kolkata')

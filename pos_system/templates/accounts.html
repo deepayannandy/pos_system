@@ -8,9 +8,10 @@
   body {
   margin: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   font-family: "Exo", sans-serif;
   color: #fff;
+  overflow: auto;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
   background-size: 400% 400%;
   -webkit-animation: gradientBG 30s ease infinite;
@@ -23,16 +24,18 @@
   transition: 0.3s;
   width: 90%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
+  height: 80%;
+  padding: 16px;
+
 }
 .cart {
   box-shadow: 0 8px 6px 0 rgba(0,0,2,0.6);
   transition: 0.3s;
   width: 90%;
+  height: 80%;
   border-radius: 5px;
-  height: 20%;
-  overflow: scroll;
+  padding: 16px;
+
 }
 .footer {
    position: fixed;
@@ -43,6 +46,7 @@
    color: white;
    text-align: center;
 }
+
 
 img {
   margin-top: 20px;
@@ -133,7 +137,7 @@ a {
     </tr>
 </table>
 <center>
-      <div class="card">
+      <div class="card" >
         <h2><u>All Transactions</u></h2>
         <table>
     <tr>
@@ -143,7 +147,9 @@ a {
       <th>Date</th>
       <th>Billing Amount</th>
     </tr>
+
     {% for tnx in all_tnx %}
+
     <tr>
       <td>{{tnx.bill_no}}</td>
       <td>{{tnx.bill_to}}</td>

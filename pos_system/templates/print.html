@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>Accounts-EzPos</title>
+<head><title>Print-EzPos</title>
 	<link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -53,7 +53,7 @@ img {
   padding: 2px 16px;
 }
 th, td {
-  padding: 10px;
+  padding: 15px;
 }
 h2 {
   padding-left: 8px;
@@ -79,7 +79,9 @@ select {
   line-height: inherit;
 }
 
-
+  form.form1 {
+        padding-top: 10px;
+    }
 @-webkit-keyframes gradientBG {
   0% {
     background-position: 0% 50%;
@@ -102,6 +104,20 @@ select {
     background-position: 0% 50%;
   }
 }
+select {
+  // A reset of styles, including removing the default dropdown arrow
+  appearance: none;
+  // Additional resets for further consistency
+  background-color: transparent;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+}
 a {
   padding: 8px;
   text-decoration: none;
@@ -109,7 +125,7 @@ a {
   font-weight: 900;
 }
   form.form1 {
-        padding-top: 10px;
+        padding-top: 3px;
     }
 
     input[type=button], input[type=submit], input[type=reset] {
@@ -134,13 +150,35 @@ a {
 </table>
 <center>
       <div class="card">
-        <h2><u>All Transactions</u></h2>
-        <h3 align="left"><a href={{billpath}}  target="_blank"><u>Print</u></a></h3>
-      </center>
+        <h2><u>Checkout</u></h2>
+          <table>
+           <form name="Item" action="/printbill" method="post" onsubmit="return validateForm()" required>
+            {% csrf_token %}
+          <tr>
+              <th>Total Billing Amount</th>
+          <th>Payment Mode</th>
+          <th>Details</th>
+              <th>Action</th>
+        </tr>
+               <tr>
+                   <td>₹ {{total}}</td>
+          <td><select type="text" id="paymentmode" name="paymentmode">
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Wallet">Wallet</option>
+              <option value="Cradit">Cradit</option>
+            </select>
+          </td>
+          <td><input type="text" id="quantity" name="quantity" min="1"></td>
+          <td><input type="submit" value="Save and Print"></td>
+
+        </tr>
+        </table>
+           </form>
       </div>
   <div class="footer">
 
-  <h3 align="left"><a href="/"><u>Back</u></a></h3>
+  <h3 align="left"><a href="/"><u></u></a></h3>
 </div>
 
 </body>

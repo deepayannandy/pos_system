@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponse
@@ -6,6 +7,9 @@ from django.http import HttpResponse
 # Create your views here.
 from .models import Users, Products, Customer, Company, Transactions
 from . import operations
+import os
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def home(requests):
@@ -140,17 +144,33 @@ def cart(requests):
         product_name=requests.POST['item_name']
         product_quantity=requests.POST['quantity']
         prod_det=Products.objects.get(name=product_name)
+        print(type(prod_det.quantity),int(prod_det.quantity)<int(product_quantity))
+        if int(prod_det.quantity)>int(product_quantity):
+            messages.info(requests, "Item added")
+            product_dis = requests.POST['discount']
+            cart_items = operations.calculate(product_name, product_quantity, product_dis)
         if int(prod_det.quantity)<int(product_quantity):
-            product_quantity=int(prod_det.quantity)
-            messages.info(requests, "Only"+str(prod_det.quantity)+"Available!")
-
-        product_dis=requests.POST['discount']
-        cart_items=operations.calculate(product_name,product_quantity,product_dis)
+            messages.info(requests, "Only" + str(prod_det.quantity) + "Available!")
+            if int(prod_det.quantity)>0:
+                product_quantity=int(prod_det.quantity)
+                product_dis = requests.POST['discount']
+                cart_items = operations.calculate(product_name, product_quantity, product_dis)
+            else:
+                cart_items = operations.get_cart()
+        if int(prod_det.quantity)==0:
+            messages.info(requests, "Out Of Stock!")
+            cart_items=operations.get_cart()
         return render(requests, 'cart.html',
                       {'date': operations.getdate(), 'customerdata': operations.get_customerdata(),
                        'items': Products.objects.values_list('name', flat=True), 'cart_items': cart_items,'total':operations.get_total_cart(),'comp_logo': path.c_logo})
     else:
         return render(requests, 'cart.html', {'date': operations.getdate(),'customerdata': operations.get_customerdata(),'items': Products.objects.values_list('name', flat=True),'cart_items': operations.get_cart(),'total':operations.get_total_cart(),'comp_logo': path.c_logo})
 def settle(requests):
-    billpath=operations.settelment()
-    return render(requests,'print.html',{'billpath':billpath})
+    return render(requests,'print.html')
+def printbill(requests):
+    fs = FileSystemStorage()
+    billpath = operations.settelment()
+    billpath = str(BASE_DIR) + "/" + billpath
+    print(billpath)
+    responce = HttpResponse(fs.open(billpath), content_type='application/pdf')
+    return responce

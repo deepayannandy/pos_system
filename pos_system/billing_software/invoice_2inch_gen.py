@@ -4,11 +4,12 @@ from reportlab.lib import pdfencrypt
 from reportlab.lib.units import inch, mm
 
 
+
 mid=80
 
 def genpdf(company,items,total):
     pagesize=(56*mm,500*mm)
-    pdf= canvas.Canvas("bills/"+str(company[1])+'.pdf',bottomup=0,pagesize=pagesize)
+    pdf= canvas.Canvas("media/bills/"+str(company[1])+'.pdf',bottomup=0,pagesize=pagesize)
     pdf.setLineWidth(.3)
     pdf.setFont("Helvetica", 10)
     pdf.drawCentredString(mid,10,"Invoice")
@@ -50,5 +51,5 @@ def genpdf(company,items,total):
     pdf.setFont("Helvetica-Bold", 12)
     pdf.drawCentredString(mid, y + 50, "Thank You Visit Again!")
     pdf.save()
-    return "bills/"+str(company[1])+'.pdf'
+    return "media/bills/"+str(company[1])+'.pdf'
 
