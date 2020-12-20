@@ -102,3 +102,7 @@ def daily_total():
 def get_due_cust():
     due_cust=Customer.objects.all()
     return due_cust
+def getsearchdate():
+    IST = pytz.timezone('Asia/Kolkata')
+    datetime_ist = datetime.now(IST)
+    return datetime_ist.strftime('%Y-%m-%d')

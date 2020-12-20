@@ -104,13 +104,38 @@ def khata(requests):
     path = Company.objects.get(pk=1)
     return render(requests,'duekhata.html',{'date':operations.getdate(),'all_det':operations.get_due_cust() ,'comp_logo':path.c_logo})
 def history(requests):
-    return HttpResponse("history")
+    if requests.method == "POST":
+        date = requests.POST['billing_date']
+        customer_name = requests.POST['consumer_name']
+        invoice_no = requests.POST['invoice_no']
+        print(date, customer_name,invoice_no)
+        path = Company.objects.get(pk=1)
+        alltnx = Transactions.objects.all()
+        return render(requests, 'history.html',
+                      {'all_tnx': alltnx, 'comp_logo': path.c_logo, 'date': operations.getdate(),
+                       'search_date': operations.getsearchdate()})
+    else:
+        path = Company.objects.get(pk=1)
+        alltnx = Transactions.objects.all()
+        return render(requests, 'history.html',
+                      {'all_tnx': alltnx, 'comp_logo': path.c_logo, 'date': operations.getdate(),
+                       'search_date': operations.getsearchdate()})
+
+
 def barcode(requests):
     return HttpResponse("barcode")
 def acounts(requests):
-    path = Company.objects.get(pk=1)
-    alltnx= Transactions.objects.all()
-    return render(requests,'accounts.html',{'all_tnx':alltnx,'comp_logo': path.c_logo})
+    if requests.method=="POST":
+        date=requests.POST['billing_date']
+        customer_name=requests.POST['consumer_name']
+        print(date,customer_name)
+        path = Company.objects.get(pk=1)
+        alltnx = Transactions.objects.all()
+        return render(requests, 'accounts.html',{'all_tnx': alltnx, 'comp_logo': path.c_logo, 'date': operations.getdate(),'search_date': operations.getsearchdate()})
+    else:
+        path = Company.objects.get(pk=1)
+        alltnx= Transactions.objects.all()
+        return render(requests,'accounts.html',{'all_tnx':alltnx,'comp_logo': path.c_logo,'date':operations.getdate(),'search_date': operations.getsearchdate()})
 
 def addcustomer(request):
     if request.method == 'POST':

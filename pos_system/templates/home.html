@@ -9,16 +9,18 @@
   margin: 0;
   width: 100%;
   height: 100%;
-  font-family: "Exo", sans-serif;
+  font-family: Arial, Helvetica;
   color: #FFFFFF;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab );
   background-size: 400% 400%;
   -webkit-animation: gradientBG 30s ease infinite;
           animation: gradientBG 30s ease infinite;
+
 }
 
 .card {
-  box-shadow: 0 8px 16px 0 rgba(0,0,2,0.6);
+  position: relative;
+  box-shadow: 0 10px 20px 0 rgba(0,0,2,0.6);
   transition: 0.3s;
   width: 100%;
   border-radius: 5px;
@@ -41,38 +43,19 @@ th, td {
 }
 h2 {
   padding: 5px;
+  color: #34495E ;
   font-weight: 900;
 }
 
 h3 {
+color: #34495E ;
   font-weight: 900;
 }
 
-@-webkit-keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+
 a {
   text-decoration: none;
-  color: #ffffff;
+  color: #FFFFFF;
   font-weight: 900;
 }
 .footer {
@@ -84,10 +67,16 @@ a {
    color: white;
    text-align: center;
 }
+.header{
+background-color: #95e1c8;
+height: 8%;
+
+}
 
 </style>
 </head>
 <body>
+<div class="header">
 <table style="width:100% ; height:3%"  >
     <tr>
       <th><h2 align="left">Hello, {{user.first_name}}</h2></th>
@@ -95,6 +84,7 @@ a {
       <th><h3 align="right">{{date}}</h3></th>
     </tr>
 </table>
+</div>
 
 <table style="width:90% ; height:50%" align="center"  >
   <tr>

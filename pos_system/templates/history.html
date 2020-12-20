@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
-<head><title>Accounts-EzPos</title>
+<head><title>History-EzPos</title>
 	<link rel="icon" href="media/{{comp_logo}}" type="image/x-icon">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -139,9 +139,11 @@ a {
             <center>
     <div class="card" align="center">
 <table>
-     <form action="/acounts" method="post">
+     <form action="/history" method="post">
          {% csrf_token %}
     <tr>
+        <th>Invoice No:</th>
+        <th><input type="number" id="invoice_no" name="invoice_no" placeholder="Incoice no.."></th>
         <th>Customer Name:</th>
         <th>
             <select name="consumer_name" id ="consumer_name" >
@@ -183,11 +185,11 @@ a {
 
   </table>
       </center>
-      </div>     
+      </div>
   <div class="footer">
 
   <h3 align="left"><a href="/"><u>Back</u></a></h3>
 </div>
- 
+
 </body>
-</html> 
+</html>
